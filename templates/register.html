@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- Registration Page to be able register new user.-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+  <title>Registeration</title>
+</head>
+
+<body style="background-color:#7ec0f6;;">
+	<!-- Navigation -->
+	<div class="navbar">
+		<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+		<a href="/" class="navbar">Home</a>
+		<a href="/login" class="right">Log In</a>
+ 	</div>
+
+	 <div style="text-align:center">
+
+	
+	<form class="myForm" action="/registerAuth" method="POST">
+		<h1> Register </h1>
+		
+		<label>User Name</label>
+		<input type="text" name = "username" placeholder="user name" required/> 
+
+		<label>Password</label>
+		<input type="password" name = "password" placeholder="password" required/>
+
+		<label>First Name</label>
+		<input type="text" name = "fname" placeholder="first name" required/>
+
+		<label>Last Name</label>
+		<input type="text" name = "lastname" placeholder="last name" required/>
+
+		<label>Nickname</label>
+		<input type="text" name = "nickname" placeholder="nickname" required/>
+
+		<input type="submit" value = Register />
+
+		{% if error %}
+			<p class="error"><strong>Error:</strong> {{error}}</p>
+		{% endif %}
+
+		{% if success %}
+		<p class="success"><strong>Success:</strong> {{ success }}</p>
+		{% endif %}
+
+	</form>
+</div>
+
+</body>
+
+</html>

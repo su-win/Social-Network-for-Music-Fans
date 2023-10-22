@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- This is LogIn Page -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+	<title>Log In</title>
+</head>
+
+<body style="background-color:#7ec0f6;">
+
+	<!-- Navigation -->
+	<div class="navbar">
+		<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+		<a href="/" class="navbar">Home</a>
+		<a href="/register" class="right">Register</a>
+ 	</div>
+
+	<div style="text-align:center">
+	
+	<form action="/loginAuth" method="POST">
+		<h1>Log In</h1>
+		<input type="text" name = "username" placeholder="username" required/> </br>
+		<input type="password" name = "password" placeholder="password" required/></br>
+		<input type="submit" value = Login />
+		{% if error %}
+			<p class="error"><strong>Error:</strong> {{error}}</p>
+		{% endif %}
+		<p>Don't have an account? <a href="/register">Register</a></p>
+	</form>
+
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+			<li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+	{% endwith %}
+	
+</body>
+</html>

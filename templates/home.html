@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- LogIn User Profile Page -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+	<title>Home</title>
+</head>
+
+<body style="background-color:#7ec0f6;">
+	<!-- Navigation -->
+	<div class="navbar">
+		<a href="/" class="left"><img src="static/images/fatear.png" alt="FatEar Logo"></a>
+		<a href="/searchsong" class="left">Search Song</a>
+		<a href="/logout"class="right">Logout</a>
+		<a href="/searchusers" class="right">Search User</a>
+	</div>
+
+
+	<div style="text-align:center">
+
+	<userform method="POST" action="/home">
+
+		<h1>Welcome {{username}}!</h1> 
+		<h5 style="text-align: right">Last Login on: {{ userprofile.lastlogin }}</h5>
+
+		<table>
+			<tr><td><strong>First Name</strong></td>
+				<td>{{ userprofile.fname }}</td>
+			</tr>
+			<tr><td><strong>Last Name</strong></td>
+				<td>{{ userprofile.lname }}</td>
+			</tr>
+			<tr><td><strong>Nickname</strong></td>
+				<td>{{ userprofile.nickname }}</td>
+			</tr>
+		</table>
+
+<!-- Friend Request Management -->
+		<h3 style="text-align: left; color: #3d0d8c">
+			You have total of {{countfrirequest}} New Friend Request
+		</h3>
+		<table>
+			{% for line in frirequest %}
+				<tr>
+					<td>{{line.newrequest}}</td>
+					<td style="text-align: center;">
+						<form action="/acceptrequest" method="POST" style="background-color: transparent; padding: 0; margin: 0;">
+						  <input type="hidden" name="sender" value="{{ line.newrequest }}">
+						  <input type="hidden" name="response" value="accept">
+						  <button type="submit" style="width: 100%; height: 100%;">Accept</button>
+						</form>
+					</td>
+					<td style="text-align: center;">
+					<form action="/rejectrequest" method="POST" style="background-color: transparent; padding: 0; margin: 0;">
+						<input type="hidden" name="sender" value="{{ line.newrequest }}">
+						<input type="hidden" name="response" value="reject">
+						<button type="submit" style="width: 100%; height: 100%;">Reject</button>
+					</form>
+					</td>
+				</tr> 
+			{% endfor %}
+		</table>
+
+<!-- Favorite Artists and their new update -->
+		{% if fans %}
+			<h3 style="text-align: left; color: #3d0d8c">Favorite artists:</h3>
+			<table>
+				<th>Artist Name</th>
+				{% for line in fans %}
+					<tr>
+						<td>{{line.fname}} {{line.lname}}</td>
+					</tr> 
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">You do not have any Favorite Artits yet.</h3>
+		{% endif %}
+
+		{% if newsongs %}
+			<h3 style="text-align: left; color: #3d0d8c">Favorite Artists' New Songs:</h3>
+			<table>
+				<th>Song Title</th>
+				<th>Artist Name</th>
+				<th>Release Date</th>
+				{% for line in newsongs %}
+					<tr>
+						<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+						<td>{{line.fname}} {{line.lname}}</td>
+						<td>{{line.releaseDate}}</td>
+					</tr> 
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">No News Update from your Favorite Artists</h3>
+		{% endif %}
+
+		
+		{% if reviews %}
+		<h3 style="text-align: left; color: #3d0d8c">Reviewed songs:</h3>
+		<table>
+			<th>Song Title</th>
+			<th>Review Text</th>
+			<th>Review Date</th>
+			{% for line in reviews %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+					<td>{{line.reviewText}}</td>
+					<td>{{line.reviewDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">You Haven't Review Any Songs Yet</h3>
+		{% endif %}
+
+		{% if ratings %}
+		<h3 style="text-align: left; color: #3d0d8c">Rated songs:</h3>
+		<table>
+			<th>Song Title</th>
+			<th>Stars</th>
+			<th>Rating Date</th>
+			{% for line in ratings %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+						{% if line.stars == 5 %}
+							<td>⭐⭐⭐⭐⭐️</td>
+						{% elif line.stars == 4 %}
+							<td>⭐⭐⭐⭐️</td>
+						{% elif line.stars == 3 %}
+							<td>⭐⭐⭐️</td>
+						{% elif line.stars == 2 %}
+							<td>⭐⭐️</td>
+						{% else %}
+							<td>⭐</td>
+						{% endif %}
+					<td>{{line.ratingDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">You Haven't Rated Any Songs Yet</h3>
+		{% endif %}
+		
+				
+<!-- Friends, Followers, Following-->
+	<h3 style="text-align: left; color: #3d0d8c">Friends, Followers and Following</h3>
+	<div class="container">
+		<table class="left">
+			<thead style="text-align: left; color: #3d0d8c">
+				<tr><th>Friends</th></tr>
+			</thead>
+			<tbody>
+				{% for line in friends %}
+					<tr><td><a href="{{ url_for('friendprofile', friendname = line.FriendName)}}">{{ line.FriendName }}</a></td> <tr></tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		
+		<table class="center">
+			<thead style="text-align: left; color: #3d0d8c">
+				<tr><th>Followers</th></tr>
+			</thead>
+			<tbody>
+				{% for line in followers %}
+					<tr>
+						<td><a href="{{ url_for('publicprofile', otheruser = line.follower)}}">{{ line.follower }}</a></td>
+					</tr> 
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<table class="right">
+			<thead style="text-align: left; color: #3d0d8c">
+				<tr><th>Following</th></tr>
+			</thead>
+			<tbody>
+				{% for line in following %}
+					<tr>
+						<td><a href="{{ url_for('publicprofile', otheruser = line.follows)}}">{{ line.follows }}</a></td>
+					</tr> 
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+<!-- New Reviews posted by friends and following-->
+	{% if newsreviewsbyfri %}
+		<h3 style="text-align: left; color: #3d0d8c">New Song Reviews posted by Friends</h3>
+		<table>
+			<th>Reviewed Song</th>
+			<th>Reviewed Text</th>
+			<th>Reviewed By</th>
+			<th>Reviewed On</th>
+			{% for line in newsreviewsbyfri %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+					<td>{{line.reviewText}}</td>
+					<td>{{line.username}}</a></td>
+					<td>{{line.reviewDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+	{% else %}
+		<h3 style="text-align: left; color: #3d0d8c">No New Reviews posted by Friends</h3>
+	{% endif %}
+
+	{% if newsreviewsbyfollower %}
+		<h3 style="text-align: left; color: #3d0d8c">New Reviews posted by Followers</h3>
+		<table>
+			<th>Reviewed Song</th>
+			<th>Reviewed Text</th>
+			<th>Reviewed By</th>
+			<th>Reviewed On</th>
+			{% for line in newsreviewsbyfollower %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+					<td>{{line.reviewText}}</td>
+					<td>{{line.username}}</a></td>
+					<td>{{line.reviewDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+	{% else %}
+		<h3 style="text-align: left; color: #3d0d8c">No New Reviews posted by Followers</h3>
+	{% endif %}
+
+	{% if newsreviewsbyfollowing %}
+		<h3 style="text-align: left; color: #3d0d8c">New Song Reviews posted by Following</h3>
+		<table>
+			<th>Reviewed Song</th>
+			<th>Reviewed Text</th>
+			<th>Reviewed By</th>
+			<th>Reviewed On</th>
+			{% for line in newsreviewsbyfollowing %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+					<td>{{line.reviewText}}</td>
+					<td>{{line.username}}</a></td>
+					<td>{{line.reviewDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+	{% else %}
+		<h3 style="text-align: left; color: #3d0d8c">No New Reviews posted by Following</h3>
+	{% endif %}
+
+</userform>
+
+</body>
+</html>

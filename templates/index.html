@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- This is Main Page -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+  <title>Fat Ear</title>
+</head>
+
+<body style="background-color:#7ec0f6;">
+
+	<!-- Navigation -->
+  {% if 'username' in session %}
+	<!-- Navigation bar for registered users -->
+		<div class="navbar">
+			<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+      <a href="/searchsong" class="left">Search Song</a>
+      <a href="/home" class="right">Back To Your Profile</a>
+			<a href="/logout" class="right">Logout</a>
+		</div>
+	{% else %}
+	<!-- Navigation bar for non-registered users -->
+	<div class="navbar">
+      <a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+      <a href="/searchsong" class="left">Search Song</a>
+			<a href="/login" class="right">LogIn</a>
+			<a href="/register" class="right">Register</a>
+		</div>
+	{% endif %}
+  
+  <div style="text-align:center">
+    <form>
+
+      <img src="/static/images/fatear.png" alt="Logo"><br><br>
+
+    <h4 style="margin-bottom: 7px;">What can visitors do?</h4>
+      <li>Visitors can search for songs.</li>
+      <li>If you want to rate and review a song, you have to log in to your account.</li>
+      <li>If you do not have an account with us yet, you can register <a href="/register">Here</a>.</li>
+      
+    <h4 style="margin-bottom: 7px;">What can registered users do?</h4>
+      <li>Register users can also search for songs.</li>
+      <li>In addition that, you can rate and review a song.</li>
+      <li>You can also manage friend requests and follow other users.</li>
+
+    <h4 style="margin-bottom: 7px;">Where can we search for songs?</h4>
+      <li>You can search on the <a href="/searchsong">Search Song</a> page.</li>
+
+    <h4 style="margin-bottom: 5px;"> How to Rate and Review a Song?</h4>
+      <li style="margin-top: 10px;">First, search a song you want to rate or review on the <a href="/searchsong">Search Song</a> page.</li>
+      <li>After you get the search results, click on the song title.</li>
+      <li>Detailed information about song will appears on the next page.</li>
+      <li>At the end of the page, there is a rating and review section.</li>
+      (Note: Rating and review can only be perform by registered users.)
+
+    <h4 style="margin-bottom: 7px;">Thanks for visiting to our site!</h4>
+    </form>
+
+   </div>
+
+</body>
+</html>

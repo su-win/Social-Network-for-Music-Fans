@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- This is Song Details Page to show the details information about a particular song.-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+	<title>Song Details</title>
+</head>
+<body style="background-color:#7ec0f6;">
+	<!-- Navigation -->
+
+	{% if 'username' in session %}
+	<!-- Navigation bar for authenticated users -->
+		<div class="navbar">
+			<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+			<a href="/home">Back to Profile</a>
+			<a href="/searchsong" class="left">Search Song</a>
+			<a href="/logout" class="right">Logout</a>
+		</div>
+	{% else %}
+	<!-- Navigation bar for non-authenticated users -->
+		<div class="navbar">
+			<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+			<a href="/searchsong" class="left">Search Song</a>
+			<a href="/login" class="right">LogIn</a>
+			<a href="/register" class="right">Register</a>
+		</div>
+	{% endif %}
+
+	<form>
+
+		<div style="text-align:center">
+			<h1>About {{title}} Song!</h1>
+			<iframe width="260" height="115"
+					src='https://www.youtube.com/embed/{{trackid}}' frameborder='0' 
+					allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' 
+					allowfullscreen>
+			</iframe>
+		</div>
+		<br>
+
+		
+		<h3 style="text-align: left; color: #5921f2">Average Rating:
+			{% if avgrating == None %}
+				<td style="color: black;">No rating yet</td>
+			{% elif avgrating == 5 %}
+				<td>⭐⭐⭐⭐⭐</td>
+			{% elif avgrating >= 4.5 %}
+				<td>⭐⭐⭐⭐½</td>
+			{% elif avgrating >= 4 %}
+				<td>⭐⭐⭐⭐</td>
+			{% elif avgrating >= 3.5 %}
+				<td>⭐⭐⭐½</td>
+			{% elif avgrating >= 3 %}
+				<td>⭐⭐⭐</td>
+			{% elif avgrating >= 2.5 %}
+				<td>⭐⭐½</td>
+			{% elif avgrating >= 2 %}
+				<td>⭐⭐</td>
+			{% elif avgrating >= 1 %}
+				<td>⭐</td>
+			{% endif %}
+		</h3>
+
+
+		<h3 style="text-align: left; color: #5921f2">About Song:</h3>
+		<table>
+			<tr>
+				<td><strong>Song Title:</strong></td>
+    			<td>{{songData.title}}</td>
+			</tr>
+			<tr>
+				<td><strong>Genre:</strong></td>
+    			<td>{{songData.genre}}</td>
+			</tr>
+			<tr>
+				<td><strong>Release Date:</strong></td>
+   				<td>{{songData.releaseDate}}</td>
+			</tr>
+			<tr>
+				<td><strong>Included In Album:</strong></td>
+    			<td>{{songData.albumTitle}}</td>
+			</tr>
+			<tr>
+				<td><strong>YouTube:</strong></td>
+				<td><a href="{{songData.songURL}}">{{songData.songURL}}</a></td>
+			</tr>
+		</table>
+		
+		<h3 style="text-align: left; color: #5921f2">About Artist:</h3>
+		<table>
+			<tr><td><strong>First Name</strong></td>
+				<td>{{ artistDetails.fname }}</td>
+			</tr>
+			<tr><td><strong>Last Name</strong></td>
+				<td>{{ artistDetails.lname }}</td>
+			</tr>
+			<tr>
+				<td><strong>Artist Bio</strong></td>
+				<td>{{ artistDetails.artistBio }}</td>
+			</tr>
+			<tr>
+				<td><strong>Artist URL</strong></td>
+				<td><a href="{{artistDetails.artistURL}}"> {{ artistDetails.artistURL }}</a></td>
+			</tr>
+		</table>
+
+		<h3 style="text-align: left; color: #5921f2">Reviews By Users:</h3>
+		{% if reviews == () %}
+			<p style="text-align: left;"><strong>No Reviews Yet</strong></p>
+		{% else %}
+			<table>
+				<th>Review Text</th>
+				<th>Review Date</th>
+				{% for line in reviews %}
+					<tr>
+						<td>{{line.reviewText}}</td>
+						<td>{{line.reviewDate}}</td>
+					</tr> 
+				{% endfor %}
+			</table>
+		{% endif %}
+	</form>
+
+	
+	<br>
+
+	<div style="text-align:center">
+        
+	{% if 'username' in session %}
+		<form action="/submitrating" id="ratingform" method="POST">
+			<input type="hidden" name="title" value="{{ songData.title }}">
+			<input type="hidden" name="songID" value="{{ songData.songID }}">
+			<label for="rating" style="text-align: left; color: #5921f2; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 1.17em;">
+			Rating this song:
+				<select name="ratedstars" id="rating">
+					<option value="5">⭐⭐⭐⭐⭐️</option>
+					<option value="4">⭐⭐⭐⭐</option>
+					<option value="3">⭐⭐⭐</option>
+					<option value="2">⭐⭐</option>
+					<option value="1">⭐</option>
+				</select>
+				<button type="submit" form="ratingform">Submit Rating</button>
+			</label>
+		</form>
+		<br>
+		<form action="/submitreview" id="reviewform" method="POST">
+			<input type="hidden" name="title" value="{{ songData.title }}">
+			<input type="hidden" name="songID" value="{{ songData.songID }}">
+			<label for="review" style="text-align: left; color: #5921f2; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 1.17em;">
+			Write a review:</label><br>
+				<textarea name="reviewtext" id="review" style="text-align: left !important;" rows="4" cols="50"></textarea>
+				
+			<br><br>
+			<button name=reviewbutton type="submit">Submit Review</button>
+		</form>
+
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul class=flashes>
+				{% for message in messages %}
+					<li>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
+
+	{% endif %}
+
+</body>
+</html>

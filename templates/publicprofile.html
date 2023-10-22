@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!--  Profile Page for follows and followers-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+  <title>Home</title>
+</head>
+
+<body style="background-color:#7ec0f6;">
+	<!-- Navigation -->
+	<div class="navbar">
+		<a href="/" class="left"><img src="static/images/fatear2.png" alt="FatEar Logo"></a>
+		<a href="/home" class="left">Back To Your Profile</a>
+		<a href="/logout"class="right">Logout</a>
+	</div>
+
+
+	<div style="text-align:center">
+
+	<userform method="POST" action="/home">
+
+		<h1>{{otheruser}}'s Profile!</h1>
+
+		<table>
+			<tr><td><strong>First Name</strong></td>
+				<td>{{ userprofile.fname }}</td>
+			</tr>
+			<tr><td><strong>Last Name</strong></td>
+				<td>{{ userprofile.lname }}</td>
+			</tr>
+			<tr><td><strong>Nickname</strong></td>
+				<td>{{ userprofile.nickname }}</td>
+			</tr>
+		</table>
+
+		{% if fans %}
+			<h3 style="text-align: left; color: #3d0d8c">Favorite artists:</h3>
+			<table>
+				<th>Artist Name</th>
+				{% for line in fans %}
+					<tr>
+						<td>{{line.fname}} {{line.lname}}</td>
+					</tr> 
+				{% endfor %}
+			</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">Do not have any Favorite Artits yet.</h3>
+		{% endif %}
+
+		{% if reviews %}
+		<h3 style="text-align: left; color: #3d0d8c">Reviewed songs:</h3>
+		<table>
+			<th>Song Title</th>
+			<th>Review Text</th>
+			<th>Review Date</th>
+			{% for line in reviews %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+					<td>{{line.reviewText}}</td>
+					<td>{{line.reviewDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">Haven't Review Any Songs Yet</h3>
+		{% endif %}
+
+		{% if ratings %}
+		<h3 style="text-align: left; color: #3d0d8c">Rated songs:</h3>
+		<table>
+			<th>Song Title</th>
+			<th>Stars</th>
+			<th>Rating Date</th>
+			{% for line in ratings %}
+				<tr>
+					<td><a href="{{ url_for('songdetails', title = line.title)}}">{{line.title}}</a></td>
+						{% if line.stars == 5 %}
+							<td>⭐⭐⭐⭐⭐️</td>
+						{% elif line.stars == 4 %}
+							<td>⭐⭐⭐⭐️</td>
+						{% elif line.stars == 3 %}
+							<td>⭐⭐⭐️</td>
+						{% elif line.stars == 2 %}
+							<td>⭐⭐️</td>
+						{% else %}
+							<td>⭐</td>
+						{% endif %}
+					<td>{{line.ratingDate}}</td>
+				</tr> 
+			{% endfor %}
+		</table>
+		{% else %}
+			<h3 style="text-align: left; color: #3d0d8c">Haven't Rated Any Songs Yet</h3>
+		{% endif %}
+
+</userform>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- sw5205 -->
+<!-- Page to display fail or success rating and review -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- to control the layout on mobile browsers -->	
+	<link rel="stylesheet" type="text/css" href="static/css/mycss.css">
+	<title>Display Message</title>
+</head>
+<body style="background-color:#7ec0f6;">
+	<!-- Navigation -->
+
+	{% if 'username' in session %}
+	<!-- Navigation bar for authenticated users -->
+		<div class="navbar">
+			<a href="/">Home</a>
+			<a href="{{ url_for('songdetails', title=title) }}" class="left">Back to Song Details</a>
+			<a href="/logout" class="right">Logout</a>
+		</div>
+
+        <form>
+
+            <div style="text-align:center">
+				
+			<h1>{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						{% for message in messages %}
+							<div class="alert alert-success">{{ message }}</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+			</h1>
+			<p>Thank you for your feedback.</p>
+			  
+        </form>
+
+	{% else %}
+	<!-- Navigation bar for non-authenticated users -->
+		<div class="navbar">
+			<a href="/">Home</a>
+			<a href="/login" class="right">LogIn</a>
+			<a href="/register" class="right">Register</a>
+		</div>
+
+        <form>
+            <h1>Access Denied.</h1>
+        </form>
+	{% endif %}
+    
+
+</body>
+</html>
